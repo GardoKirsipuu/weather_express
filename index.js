@@ -55,6 +55,11 @@ app.all('/', function (req, res) {
 		})
 })
 
+
+app.all('/savelogs', function (req, res) {
+	res.render('saveLogs')
+})
+
 function log(eventName, extraData, userIp) {
 
 	// Create timestamp

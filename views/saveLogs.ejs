@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Get Data and Save to log.txt</title>
+</head>
+
+<body>
+    <form id="logForm">
+        <button type="submit">Get and Save Data</button>
+    </form>
+
+    <div id="result"></div>
+
+    <script>
+        const logForm = document.getElementById('logForm');
+        const result = document.getElementById('result');
+
+        logForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            fetch('https://ilmaapp.azurewebsites.net/logs', { method: 'GET' })
+                .then((response) => response.text())
+                .then((data) => {
+                    result.textContent = 'Data received. Click the link to download.';
+
+                    // Create a Blob with the data and a download link
+                    const blob = new Blob([data], { type: 'text/plain' });
+                    const url = window.URL.createObjectURL(blob);
+
+                    const a = document.createElement('a');
+                    a.style.display = 'none';
+                    a.href = url;
+                    a.download = 'log.txt';
+                    document.body.appendChild(a);
+
+                    a.click();
+
+                    window.URL.revokeObjectURL(url);
+                })
+                .catch((error) => {
+                    result.textContent = 'Error: ' + error.message;
+                });
+        });
+    </script>
+</body>
+
+</html>
